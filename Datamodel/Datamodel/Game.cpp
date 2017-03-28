@@ -174,7 +174,7 @@ bool Game::guessSentence(const std::string sentence) {
 	for (int i = 0; i < SENTENCE_ROWS; i++) {
 		for (int j = 0; j < SENTENCE_COLUMNS; j++) {
 			char c = _sentence[i][j].getChar();
-			if (c != 0)
+			if (c != 0 && c != '-')
 				solution += c;
 		}
 	}
@@ -220,7 +220,15 @@ void Game::loadSentenceFromString(const std::string s) {
 
 	for (int i = 0; i < SENTENCE_ROWS; i++) {
 		for (int j = 0; j < SENTENCE_COLUMNS; j++) {
-			_sentence[i][j] = Letter(s[i * SENTENCE_COLUMNS + j]);
+
+			char c = s[i * SENTENCE_COLUMNS + j];
+			if (c == '*') {
+				_sentence[i][j] = Letter();
+			}
+			else {
+				_sentence[i][j] = Letter(c);
+			}
+			
 		}
 	}
 
