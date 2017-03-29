@@ -14,9 +14,9 @@ int main() {
 	);
 
 	std::cout << int(g.spin()) << std::endl;
-	std::cout << g.guessConsonant('D') << std::endl;
-	std::cout << g.getCurrentPlayer()->getBalance() << std::endl;
-	std::cout << g.guessSentence("ICH SPIELE DAS GLUECKSRADSPIEL") << std::endl;
+	g.guessConsonant('D');
+	g.getCurrentPlayer()->getBalance();
+	g.guessSentence("ICH SPIELE DAS GLUECKSRADSPIEL");
 	std::cout << g.getOutput();
 
 	int x;

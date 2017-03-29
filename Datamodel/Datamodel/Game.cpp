@@ -78,12 +78,17 @@ FortuneWheelField Game::spin(void) {
 	_lastSpinResult = _wheel.spin();
 	_spunWheel = true;
 	
+	Player* p = getCurrentPlayer();
+
 	if (_lastSpinResult == FortuneWheelField::BANKRUPT) {
-		getCurrentPlayer()->setBalance(0);
+		p->setBalance(0);
+		_output << p->getName() << " just lost all his money :(\n";
 		nextPlayer();
 	} else if (_lastSpinResult == FortuneWheelField::EXTRASPIN) {
-		Player* p = getCurrentPlayer();
+		_output << p->getName() << " got an extra spin (" << 
+			p->getExtraSpins() << " total).";
 		p->setExtraSpins(p->getExtraSpins() + 1);
+		_spunWheel = false;
 	} else if (_lastSpinResult == FortuneWheelField::SKIP) {
 		nextPlayer();
 	}
@@ -119,6 +124,7 @@ int Game::guessConsonant(char c) {
 	Player* p = getCurrentPlayer();
 	p->setBalance(p->getBalance() + hits * int(_lastSpinResult));
 	_output << '\'' << c << "' was revealed " << hits << " times.\n";
+	_output << p->getName() << " won " << hits * int(_lastSpinResult) << "$.\n";
 
 	if (onlyVowelsRemaining())
 		_output << "Only vowels remaining.\n";
