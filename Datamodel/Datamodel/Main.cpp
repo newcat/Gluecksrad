@@ -8,15 +8,16 @@ int main() {
 	g.addPlayer("Freddy");
 	g.loadSentenceFromString(
 		"*ICH SPIELE**"
-		"**** DAS*****"
-		" GLUECKSRAD-*"
+		"**** DAS ****"
+		"*GLUECKSRAD-*"
 		"****SPIEL****"
 	);
 
 	std::cout << int(g.spin()) << std::endl;
 	std::cout << g.guessConsonant('D') << std::endl;
 	std::cout << g.getCurrentPlayer()->getBalance() << std::endl;
-	std::cout << g.guessSentence("ICH SPIELE DAS GLUECKSRADSPIEL");
+	std::cout << g.guessSentence("ICH SPIELE DAS GLUECKSRADSPIEL") << std::endl;
+	std::cout << g.getOutput();
 
 	int x;
 	std::cin >> x;

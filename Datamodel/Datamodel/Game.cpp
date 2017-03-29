@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <exception>
 
 Game::Game(void)
 {
@@ -33,7 +32,7 @@ Letter** Game::getSentence(void) const {
 }
 
 std::string Game::getOutput(void) const {
-	return _output;
+	return _output.str();
 }
 
 Player* Game::getCurrentPlayer(void) const {
@@ -104,7 +103,7 @@ int Game::guessConsonant(char c) {
 	if (islower(c))
 		c = toupper(c);
 
-	if (!isalpha(c) || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U')
+	if (!isalpha(c) || isVowel(c))
 		throw std::exception("The char must be valid and not a vowel.");
 
 	int hits = 0;
@@ -119,6 +118,10 @@ int Game::guessConsonant(char c) {
 
 	Player* p = getCurrentPlayer();
 	p->setBalance(p->getBalance() + hits * int(_lastSpinResult));
+	_output << '\'' << c << "' was revealed " << hits << " times.\n";
+
+	if (onlyVowelsRemaining())
+		_output << "Only vowels remaining.\n";
 
 	if (hits == 0)
 		nextPlayer();
@@ -138,7 +141,7 @@ int Game::buyVowel(char c) {
 	if (islower(c))
 		c = toupper(c);
 
-	if (!isalpha(c) || !(c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U'))
+	if (!isalpha(c) || !isVowel(c))
 		throw std::exception("The char must be valid and a vowel.");
 
 	int hits = 0;
@@ -153,6 +156,11 @@ int Game::buyVowel(char c) {
 
 	Player* p = getCurrentPlayer();
 	p->setBalance(p->getBalance() - VOWEL_COST);
+	_output << p->getName() << " bought the vowel '" << c << "' for " << VOWEL_COST << "$.\n";
+	_output << '\'' << c << "' was revealed " << hits << " times.\n";
+	
+	if (onlyVowelsRemaining())
+		_output << "Only vowels remaining.\n";
 
 	if (hits == 0)
 		nextPlayer();
@@ -182,12 +190,14 @@ bool Game::guessSentence(const std::string sentence) {
 	if (solution == sentence) {
 
 		(*_playerIterator)->addBalanceToTotal();
+		_output << getCurrentPlayer()->getName() << " guessed the sentence correctly.\n";
 		nextRound();
 		return true;
 
 	} else {
 
 		(*_playerIterator)->setBalance(0);
+		_output << getCurrentPlayer()->getName() << " made a bad guess.\n";
 		nextPlayer();
 		return false;
 		
@@ -205,10 +215,13 @@ void Game::nextPlayer(void) {
 	Player* p = getCurrentPlayer();
 	if (p->getExtraSpins() > 0) {
 		p->setExtraSpins(p->getExtraSpins() - 1);
+		_output << p->getName() << " used an extra spin.\n" <<
+			p->getExtraSpins() << " extra spins remaining.\n";
 	} else {
 		_playerIterator++;
 		if (_playerIterator == _players.end())
 			_playerIterator = _players.begin();
+		_output << "It's " + getCurrentPlayer()->getName() << "'s turn.\n";
 	}
 	
 }
@@ -232,4 +245,24 @@ void Game::loadSentenceFromString(const std::string s) {
 		}
 	}
 
+}
+
+bool Game::onlyVowelsRemaining(void) const {
+
+	for (int i = 0; i < SENTENCE_ROWS; i++) {
+		for (int j = 0; j < SENTENCE_COLUMNS; j++) {
+			if (!_sentence[i][j].isVisible()) {
+				char c = _sentence[i][j].getChar();
+				if (!isVowel(c) && c != '*')
+					return false;
+			}
+		}
+	}
+
+	return true;
+
+}
+
+bool isVowel(char c) {
+	return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
 }

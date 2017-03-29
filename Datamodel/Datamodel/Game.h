@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include <exception>
+#include <sstream>
 
 #include "FortuneWheel.h"
 #include "Player.h"
@@ -10,6 +12,8 @@
 #define SENTENCE_COLUMNS	13
 #define SENTENCE_ROWS		4
 #define VOWEL_COST			1000
+
+bool isVowel(char c);
 
 class Game
 {
@@ -35,11 +39,12 @@ private:
 	bool _spunWheel;
 	std::vector<Player*> _players;
 	std::vector<Player*>::iterator _playerIterator;
-	std::string _output;
+	std::ostringstream _output;
 	Letter** _sentence;
 	FortuneWheel _wheel;
 	FortuneWheelField _lastSpinResult;
 	void nextPlayer(void);
+	bool onlyVowelsRemaining(void) const;
 
 };
 
