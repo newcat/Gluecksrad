@@ -6,17 +6,12 @@ int main() {
 
 	Game g;
 	g.addPlayer("Freddy");
-	g.loadSentenceFromString(
-		"*ICH SPIELE**"
-		"**** DAS ****"
-		"*GLUECKSRAD-*"
-		"****SPIEL****"
-	);
+	g.nextRound();
 
-	std::cout << int(g.spin()) << std::endl;
-	g.guessConsonant('D');
+	int res;
+	while ((res = int(g.spin())) < 5) std::cout << res << std::endl;
+	g.guessConsonant('S');
 	g.getCurrentPlayer()->getBalance();
-	g.guessSentence("ICH SPIELE DAS GLUECKSRADSPIEL");
 	std::cout << g.getOutput();
 
 	int x;

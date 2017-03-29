@@ -1,7 +1,10 @@
 #include "Game.h"
+#include "Sentences.h"
 
 Game::Game(void)
 {
+
+	srand(time(NULL));
 
 	_sentence = new Letter*[SENTENCE_ROWS];
 	for (int i = 0; i < SENTENCE_ROWS; i++) {
@@ -48,7 +51,7 @@ std::vector<Player*>* Game::getPlayers(void) {
 	return &_players;
 }
 
-void Game::addPlayer(const std::string name) {
+void Game::addPlayer(std::string name) {
 	
 	_players.push_back(new Player(name));
 
@@ -68,6 +71,8 @@ void Game::nextRound(void) {
 	}
 	_playerIterator = _players.begin();
 
+	loadSentenceFromString(all_sentences[rand() % SENTENCE_COUNT]);
+
 }
 
 FortuneWheelField Game::spin(void) {
@@ -84,10 +89,10 @@ FortuneWheelField Game::spin(void) {
 		p->setBalance(0);
 		_output << p->getName() << " just lost all his money :(\n";
 		nextPlayer();
-	} else if (_lastSpinResult == FortuneWheelField::EXTRASPIN) {
-		_output << p->getName() << " got an extra spin (" << 
-			p->getExtraSpins() << " total).";
+	} else if (_lastSpinResult == FortuneWheelField::EXTRASPIN) {		
 		p->setExtraSpins(p->getExtraSpins() + 1);
+		_output << p->getName() << " got an extra spin (" <<
+			p->getExtraSpins() << " total).\n";
 		_spunWheel = false;
 	} else if (_lastSpinResult == FortuneWheelField::SKIP) {
 		nextPlayer();
@@ -232,7 +237,7 @@ void Game::nextPlayer(void) {
 	
 }
 
-void Game::loadSentenceFromString(const std::string s) {
+void Game::loadSentenceFromString(std::string s) {
 
 	if (s.length() != SENTENCE_COLUMNS * SENTENCE_ROWS)
 		throw std::exception("String has wrong length.");

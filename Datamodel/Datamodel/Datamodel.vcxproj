@@ -69,6 +69,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Letter.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="Sentences.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FortuneWheel.cpp" />
