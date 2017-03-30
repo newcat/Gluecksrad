@@ -23,7 +23,7 @@ public:
 
 	Letter** getSentence(void) const;
 	std::string getOutput(void) const;
-	Player* getCurrentPlayer(void) const;
+	Player* getCurrentPlayer(void);
 	std::vector<Player*>* getPlayers(void);
 
 	void loadSentenceFromString(const std::string s);

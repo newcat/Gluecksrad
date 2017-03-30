@@ -2,9 +2,10 @@
 
 enum class FortuneWheelField 
 {
-	BANKRUPT = 0,
-	EXTRASPIN = 1,
-	SKIP = 2,
+	INVALID = 0,
+	BANKRUPT = 1,
+	EXTRASPIN = 2,
+	SKIP = 3,
 	WIN50 = 50,
 	WIN75 = 75,
 	WIN100 = 100,

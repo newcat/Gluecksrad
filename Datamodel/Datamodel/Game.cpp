@@ -38,10 +38,12 @@ std::string Game::getOutput(void) const {
 	return _output.str();
 }
 
-Player* Game::getCurrentPlayer(void) const {
+Player* Game::getCurrentPlayer(void) {
 
-	if (_players.size() == 0)
-		throw std::exception("No players added yet.");
+	if (_players.size() == 0) {
+		_output << "No players added yet.\n";
+		return NULL;
+	}
 
 	return *_playerIterator;
 
@@ -62,14 +64,17 @@ void Game::addPlayer(std::string name) {
 
 void Game::nextRound(void) {
 	
-	if (_players.size() == 0)
-		throw std::exception("No players added yet.");
+	if (_players.size() == 0) {
+		_output << "No players added yet.\n";
+		return;
+	}
 
 	for (std::vector<Player*>::iterator it = _players.begin();
 		it != _players.end(); it++) {
 			(*it)->reset();
 	}
 	_playerIterator = _players.begin();
+	_spunWheel = false;
 
 	loadSentenceFromString(all_sentences[rand() % SENTENCE_COUNT]);
 
@@ -77,8 +82,10 @@ void Game::nextRound(void) {
 
 FortuneWheelField Game::spin(void) {
 
-	if (_spunWheel)
-		throw std::exception("Wheel has already been spun this round.");
+	if (_spunWheel) {
+		_output << "Wheel has already been spun this round.\n";
+		return FortuneWheelField::INVALID;
+	}
 
 	_lastSpinResult = _wheel.spin();
 	_spunWheel = true;
@@ -104,17 +111,23 @@ FortuneWheelField Game::spin(void) {
 
 int Game::guessConsonant(char c) {
 
-	if (_players.size() == 0)
-		throw std::exception("No players added yet.");
+	if (_players.size() == 0) {
+		_output << "No players added yet.\n";
+		return 0;
+	}
 
-	if (!_spunWheel)
-		throw std::exception("You have to spin the wheel first.");
+	if (!_spunWheel) {
+		_output << "You have to spin the wheel first.\n";
+		return 0;
+	}
 
 	if (islower(c))
 		c = toupper(c);
 
-	if (!isalpha(c) || isVowel(c))
-		throw std::exception("The char must be valid and not a vowel.");
+	if (!isalpha(c) || isVowel(c)) {
+		_output << "The char must be valid and not a vowel.\n";
+		return 0;
+	}
 
 	int hits = 0;
 	for (int i = 0; i < SENTENCE_ROWS; i++) {
@@ -131,6 +144,8 @@ int Game::guessConsonant(char c) {
 	_output << '\'' << c << "' was revealed " << hits << " times.\n";
 	_output << p->getName() << " won " << hits * int(_lastSpinResult) << "$.\n";
 
+	_spunWheel = false;
+
 	if (onlyVowelsRemaining())
 		_output << "Only vowels remaining.\n";
 
@@ -143,17 +158,23 @@ int Game::guessConsonant(char c) {
 
 int Game::buyVowel(char c) {
 
-	if (_players.size() == 0)
-		throw std::exception("No players added yet.");
+	if (_players.size() == 0) {
+		_output << "No players added yet.\n";
+		return 0;
+	}
 
-	if (!_spunWheel)
-		throw std::exception("You have to spin the wheel first.");
+	if (!_spunWheel) {
+		_output << "You have to spin the wheel first.\n";
+		return 0;
+	}
 
 	if (islower(c))
 		c = toupper(c);
 
-	if (!isalpha(c) || !isVowel(c))
-		throw std::exception("The char must be valid and a vowel.");
+	if (!isalpha(c) || !isVowel(c)) {
+		_output << "The char must be valid and a vowel.\n";
+		return 0;
+	}
 
 	int hits = 0;
 	for (int i = 0; i < SENTENCE_ROWS; i++) {
@@ -182,11 +203,15 @@ int Game::buyVowel(char c) {
 
 bool Game::guessSentence(const std::string sentence) {
 	
-	if (_players.size() == 0)
-		throw std::exception("No players added yet.");
+	if (_players.size() == 0) {
+		_output << "No players added yet.\n";
+		return false;
+	}
 
-	if (!_spunWheel)
-		throw std::exception("You have to spin the wheel first.");
+	if (!_spunWheel) {
+		_output << "You have to spin the wheel first.\n";
+		return false;
+	}
 
 	std::string solution;
 
@@ -218,8 +243,10 @@ bool Game::guessSentence(const std::string sentence) {
 
 void Game::nextPlayer(void) {
 
-	if (_players.size() == 0)
-		throw std::exception("No players added yet.");
+	if (_players.size() == 0) {
+		_output << "No players added yet.\n";
+		return;
+	}
 
 	_spunWheel = false;
 
@@ -239,8 +266,10 @@ void Game::nextPlayer(void) {
 
 void Game::loadSentenceFromString(std::string s) {
 
-	if (s.length() != SENTENCE_COLUMNS * SENTENCE_ROWS)
-		throw std::exception("String has wrong length.");
+	if (s.length() != SENTENCE_COLUMNS * SENTENCE_ROWS) {
+		_output << "String has wrong length.\n";
+		return;
+	}
 
 	for (int i = 0; i < SENTENCE_ROWS; i++) {
 		for (int j = 0; j < SENTENCE_COLUMNS; j++) {

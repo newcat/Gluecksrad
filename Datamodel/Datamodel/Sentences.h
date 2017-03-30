@@ -19,7 +19,7 @@ const char* all_sentences[] = {
 	"***************DES VODKAS *REINE SEELE**************",
 	"**************DU WILLST *****ES. DU ****KRIEGST ES**",
 	"**************EINMAL HIN, **ALLES DRIN**************",
-	"*************UHU PATAFIX! *FIXERT FIX!**************",
+	"*************UHU PATAFIX! *FIXIERT FIX!*************",
 	"****************UNTERM ******STRICH ****ZAEHLE ICH**",
 	"**************QUADRATISCH. PRAKTISCH. ******GUT*****",
 	"***************GESCHMACK ******IST ********KING*****"
