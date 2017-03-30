@@ -37,6 +37,7 @@ public:
 
 private:
 	bool _spunWheel;
+	bool _guessedConsonant;
 	std::vector<Player*> _players;
 	std::vector<Player*>::iterator _playerIterator;
 	std::ostringstream _output;

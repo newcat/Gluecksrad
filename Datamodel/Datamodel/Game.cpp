@@ -75,6 +75,7 @@ void Game::nextRound(void) {
 	}
 	_playerIterator = _players.begin();
 	_spunWheel = false;
+	_guessedConsonant = false;
 
 	loadSentenceFromString(all_sentences[rand() % SENTENCE_COUNT]);
 
@@ -82,7 +83,9 @@ void Game::nextRound(void) {
 
 FortuneWheelField Game::spin(void) {
 
-	if (_spunWheel) {
+	if (_guessedConsonant) {
+		_guessedConsonant = false;
+	} else if (_spunWheel) {
 		_output << "Wheel has already been spun this round.\n";
 		return FortuneWheelField::INVALID;
 	}
@@ -121,6 +124,11 @@ int Game::guessConsonant(char c) {
 		return 0;
 	}
 
+	if (_guessedConsonant) {
+		_output << "You already guessed a consonant this round.\n";
+		return 0;
+	}
+
 	if (islower(c))
 		c = toupper(c);
 
@@ -144,7 +152,7 @@ int Game::guessConsonant(char c) {
 	_output << '\'' << c << "' was revealed " << hits << " times.\n";
 	_output << p->getName() << " won " << hits * int(_lastSpinResult) << "$.\n";
 
-	_spunWheel = false;
+	_guessedConsonant = true;
 
 	if (onlyVowelsRemaining())
 		_output << "Only vowels remaining.\n";
@@ -255,6 +263,7 @@ void Game::nextPlayer(void) {
 	}
 
 	_spunWheel = false;
+	_guessedConsonant = false;
 
 	Player* p = getCurrentPlayer();
 	if (p->getExtraSpins() > 0) {
