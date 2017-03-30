@@ -168,6 +168,12 @@ int Game::buyVowel(char c) {
 		return 0;
 	}
 
+	if (getCurrentPlayer()->getBalance() < VOWEL_COST) {
+		_output << "You don't have enough money to buy a vowel (" <<
+			VOWEL_COST << " required).\n";
+		return 0;
+	}
+
 	if (islower(c))
 		c = toupper(c);
 
