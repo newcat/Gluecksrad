@@ -116,17 +116,17 @@ int Game::guessConsonant(char c) {
 
 	if (_players.size() == 0) {
 		_output << "No players added yet.\n";
-		return 0;
+		return -1;
 	}
 
 	if (!_spunWheel) {
 		_output << "You have to spin the wheel first.\n";
-		return 0;
+		return -1;
 	}
 
 	if (_guessedConsonant) {
 		_output << "You already guessed a consonant this round.\n";
-		return 0;
+		return -1;
 	}
 
 	if (islower(c))
@@ -134,7 +134,7 @@ int Game::guessConsonant(char c) {
 
 	if (!isalpha(c) || isVowel(c)) {
 		_output << "The char must be valid and not a vowel.\n";
-		return 0;
+		return -1;
 	}
 
 	int hits = 0;
@@ -168,18 +168,18 @@ int Game::buyVowel(char c) {
 
 	if (_players.size() == 0) {
 		_output << "No players added yet.\n";
-		return 0;
+		return -1;
 	}
 
 	if (!_spunWheel) {
 		_output << "You have to spin the wheel first.\n";
-		return 0;
+		return -1;
 	}
 
 	if (getCurrentPlayer()->getBalance() < VOWEL_COST) {
 		_output << "You don't have enough money to buy a vowel (" <<
 			VOWEL_COST << " required).\n";
-		return 0;
+		return -1;
 	}
 
 	if (islower(c))
@@ -187,7 +187,7 @@ int Game::buyVowel(char c) {
 
 	if (!isalpha(c) || !isVowel(c)) {
 		_output << "The char must be valid and a vowel.\n";
-		return 0;
+		return -1;
 	}
 
 	int hits = 0;
