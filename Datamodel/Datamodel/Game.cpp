@@ -76,6 +76,7 @@ void Game::nextRound(void) {
 	_playerIterator = _players.begin();
 	_spunWheel = false;
 	_guessedConsonant = false;
+	_output.str("");
 
 	loadSentenceFromString(all_sentences[rand() % SENTENCE_COUNT]);
 
